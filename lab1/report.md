@@ -26,9 +26,16 @@ Date of finished: 26.09.2024
 3. Установим python3 и ansible. Убедимся, что всё установлено корректно.
 P.S. В команде проверки `ls -la /usr/bin/python3*` используем символ *, потому что мы не знаем, какая конкретно версия установлена и не можем её указать.
 
-![alt text](img/monitor.png)
+![alt text](img/install.png)
 
 #### Установка CHR (RouterOS) на VirtualBox
+1. Создадим ВМ с помощью Oracle VirtualBox с образом, который был скачат с сайта mikrotik.com
+
+<img src="img/monitor.png" width="500">
+
+2. Узнаем ip-адресс СНR
+
+![alt text](img/ip.png)
 
 <details>
 <summary> Возникшие трудности </summary>
