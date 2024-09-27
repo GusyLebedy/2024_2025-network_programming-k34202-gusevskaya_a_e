@@ -6,7 +6,7 @@ Group: K34202
 Author: Gusevskaya Arina  
 Lab: Lab1  
 Date of create: 25.09.2024  
-Date of finished: 26.09.2024 
+Date of finished: 27.09.2024 
 
 ## Лабораторная работа №1 "Установка CHR и Ansible, настройка VPN"
 
