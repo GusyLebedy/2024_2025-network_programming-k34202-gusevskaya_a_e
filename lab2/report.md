@@ -40,15 +40,15 @@ Date of finished: 25.10.2024
    
 CHR1 -> сервер
 
-<img src="img/ping1.png" width="900">
+![alt text](img/ping1.png)
 
 CHR1 -> CHR2
 
-<img src="img/ping2.png" width="700">
+![alt text](img/ping2.png)
 
 CHR2 -> сервер
 
-<img src="img/ping3.png" width="900">
+![alt text](img/ping3.png)
 
 <details>
    
