@@ -28,14 +28,23 @@ Date of finished: 25.10.2024
 
 3. В этот раз настроим CHR клиент через веб-интерфейс. Создадим интервейс wg2 на клиенте и соответствующий peer.
 
-<img src="img/wg.png" width="500">
-<img src="img/peer.png" width="500">
+<img src="img/wg.png" width="800">
+<img src="img/peer.png" width="800">
 
-4. Добавим информацию о новом клиенте в конфигурационный файл wg0.conf в директории etc/wireguard/ на сервере.
+4. Добавим информацию о новом клиенте в конфигурационный файл wg0.conf в директории etc/wireguard/ на сервере. Добавим IP.
 
 <img src="img/conf.png" width="500">
+<img src="img/ipadd.png" width="500">
 
-5. Пропингуем сервер с клиентов, чтобы протестировать связь
+5. Пропингуем сервер с клиентов, чтобы протестировать связь.
+   
+Клиент -> сервер
+
+<img src="img/ping1.png" width="500">
+
+Клиент -> клиент
+
+<img src="img/pimg2.png" width="500">
 
 <details>
    
