@@ -46,6 +46,10 @@ CHR1 -> CHR2
 
 <img src="img/ping2.png" width="700">
 
+CHR2 -> сервер
+
+<img src="img/ping3.png" width="900">
+
 <details>
    
 <summary><b>Возникшие трудности</b></summary>
