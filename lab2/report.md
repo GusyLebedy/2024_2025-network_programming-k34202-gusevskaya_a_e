@@ -34,17 +34,17 @@ Date of finished: 25.10.2024
 4. Добавим информацию о новом клиенте в конфигурационный файл wg0.conf в директории etc/wireguard/ на сервере. Добавим IP.
 
 <img src="img/conf.png" width="500">
-<img src="img/ipadd.png" width="500">
+<img src="img/ipadd.png" width="700">
 
 5. Пропингуем сервер с клиентов, чтобы протестировать связь.
    
-Клиент -> сервер
+CHR1 -> сервер
 
-<img src="img/ping1.png" width="500">
+<img src="img/ping1.png" width="900">
 
-Клиент -> клиент
+CHR1 -> CHR2
 
-<img src="img/pimg2.png" width="500">
+<img src="img/ping2.png" width="700">
 
 <details>
    
@@ -57,16 +57,15 @@ Date of finished: 25.10.2024
 
 ![alt text](img/create.png)
 
-2. Проверим конфигурацию и корректность работы ВМ.
+2. Кто я..?
 
-![alt text](img/conf.png)
-
+![alt text](img/whoami.png)
 
 3. Установим python3 и ansible. Убедимся, что всё установлено корректно.
    
 P.S. В команде проверки `ls -la /usr/bin/python3*` используем символ *, потому что мы не знаем, какая конкретно версия установлена и не можем её указать.
 
-![alt text](img/install.png)
+![alt text](img/python.png)
 
 </details>
 
