@@ -77,22 +77,198 @@ P.S. В команде проверки `ls -la /usr/bin/python3*` исполь�
 
 ![alt text](img/Network.drawio.png)  
 
+### Настройка Ansible
 
+Используя Ansible настроим на 2-х CHR:
+* логин/пароль;
+* NTP Client;
+* OSPF с указанием Router ID;
+* сбор данных по OSPF топологии и полный конфиг устройства.
 
+1. Перед настройкой проверим версию Ansible и что коллекция для roterous установлена.
+  
+![alt text](img/pr.png)  
 
-### 
+2. Ansible использует SSH для подключения к удаленным хостам. Чтобы избежать возможных ошибок (о них часто пишут на SOF), создадим публичный ключ на сервере и импортируем его на клиентов.
 
-Проверим доступ сервера (GCP) к клиенту (CHR).
+![alt text](img/key.png)  
 
-![alt text](img/pingvm.png)
+3. Далее создадим inventory/hosts — это файл инвентаря (inventory file), который используется в Ansible для управления списком хостов (управляемых узлов). Он содержит информацию о хостах, которыми нужно управлять, их группах, а также дополнительные параметры подключения.
 
-Поверим доступ клиента к серверу.
+```
+[chr_routers]
+chr1 ansible_host=10.0.0.2 ansible_user=admin
+chr2 ansible_host=10.0.0.3 ansible_user=admin
 
-![alt text](img/pinggcp.png)
+[chr_routers:vars]
+ansible_connection=ansible.netcommon.network_cli
+ansible_network_os=community.routeros.routeros
+ansible_ssh_private_key_file=/home/arina/.ssh/id_rsa
+```
 
-![alt text](img/pingipgcp.png)
+4. И конфигурационныйй файл. Где прописано, что где лежит.
 
-Все пинги прошли успешно! Цель работы достигнута.
+```
+[defaults]
+inventory = ./inventory/hosts
+host_key_checking = False
+ansible_remote_tmp = /tmp
+collections_paths = /home/arina/.ansible/collections:/usr/share/ansible/collections
+```
+5. Плейбук выглядит следующим образом:
+
+```
+- name: Configure CHR routers with user credentials, NTP client, and OSPF
+  hosts: chr_routers
+  gather_facts: no
+  vars:
+    router_ospf_ip: "{{ '10.255.255.1/32' if ansible_host == '10.0.0.2' else '10.255.255.2/32' }}"
+  tasks:
+    - name: Set up user credentials
+      community.routeros.command:
+        commands:
+          - /user add name=arina group=full password=111
+      register: user_config
+
+    - name: Enable NTP client and configure server
+      community.routeros.command:
+        commands:
+          - /system ntp client set enabled=yes servers=0.ru.pool.ntp.org
+      register: ntp_client_config
+
+    - name: Configure OSPF
+      community.routeros.command:
+        commands:
+          - /routing ospf instance add name=default
+          - /interface bridge add name=loopback
+          - /ip address add address={{ router_ospf_ip }} interface=loopback
+          - /routing ospf instance set 0 router-id={{ router_ospf_ip }}
+          - /routing ospf area add instance=default name=backbone
+          - /routing ospf interface-template add area=backbone interfaces=ether1 type=ptp
+
+    - name: Export router configuration
+      community.routeros.command:
+        commands:
+          - /export
+      register: router_config
+
+    - name: Display router configuration
+      debug:
+        var: router_config.stdout_lines
+```
+5. Запустим его и получим следующий результат:
+
+```
+arina@compute-vm-2-1-10-hdd-1729519220003:~$ ansible-playbook chr_conf.yml
+
+PLAY [Configure CHR routers with user credentials, NTP client, and OSPF] ***********************************************************************************
+
+TASK [Set up user credentials] *****************************************************************************************************************************
+changed: [chr2]
+changed: [chr1]
+
+TASK [Enable NTP client and configure server] **************************************************************************************************************
+changed: [chr2]
+changed: [chr1]
+
+TASK [Configure OSPF] **************************************************************************************************************************************
+changed: [chr2]
+changed: [chr1]
+
+TASK [Export router configuration] *************************************************************************************************************************
+changed: [chr2]
+changed: [chr1]
+
+TASK [Display router configuration] ************************************************************************************************************************
+ok: [chr1] => {
+"router_config.stdout_lines": [
+    [
+        "# 2024-11-17 20:15:13 by RouterOS 7.16.1",
+        "# software id = ",
+        "#",
+        "/interface bridge",
+        "add name=loopback",
+        "/interface wireguard",
+        "add listen-port=51820 mtu=1420 name=wg1",
+        "/routing ospf instance",
+        "add disabled=no name=default",
+        "/routing ospf area",
+        "add disabled=no instance=default name=backbone",
+        "/interface wireguard peers",
+        "add allowed-address=10.0.0.0/24 endpoint-address=89.169.170.115 endpoint-port=\\",
+        "    51820 interface=wg1 name=peer1 persistent-keepalive=25s public-key=\\",
+        "    \"mh8ss/ilx3lStNagw6h77KNFKWZ1WoogrugNec9p5GI=\"",
+        "/ip address",
+        "add address=10.0.0.2/24 interface=wg1 network=10.0.0.0",
+        "add address=10.255.255.1 interface=loopback network=10.255.255.1",
+        "/ip dhcp-client",
+        "add interface=ether1",
+        "/ip firewall nat",
+        "add action=masquerade chain=srcnat",
+        "/ip ssh",
+        "set always-allow-password-login=yes forwarding-enabled=both host-key-type=\\",
+        "    ed25519",
+        "/routing ospf interface-template",
+        "add area=backbone disabled=no interfaces=ether1 type=ptp",
+        "/system note",
+        "set show-at-login=no",
+        "/system ntp client",
+        "set enabled=yes",
+        "/system ntp client servers",
+        "add address=0.ru.pool.ntp.org"
+    ]
+]
+}
+ok: [chr2] => {
+"router_config.stdout_lines": [
+    [
+        "# 2024-11-17 20:15:13 by RouterOS 7.16.1",
+        "# software id = ",
+        "#",
+        "/interface bridge",
+        "add name=loopback",
+        "/interface wireguard",
+        "add listen-port=51820 mtu=1420 name=wg2",
+        "/routing ospf instance",
+        "add disabled=no name=default",
+        "/routing ospf area",
+        "add disabled=no instance=default name=backbone",
+        "/interface wireguard peers",
+        "add allowed-address=10.0.0.0/24 endpoint-address=89.169.170.115 endpoint-port=\\",
+        "    51820 interface=wg2 name=peer2 persistent-keepalive=25s public-key=\\",
+
+        "    \"mh8ss/ilx3lStNagw6h77KNFKWZ1WoogrugNec9p5GI=\"",
+        "/ip address",
+        "add address=10.0.0.3/24 interface=wg2 network=10.0.0.0",
+        "add address=10.255.255.2 interface=loopback network=10.255.255.2",
+        "/ip dhcp-client",
+        "add interface=ether1",
+        "/ip firewall nat",
+        "add action=masquerade chain=srcnat",
+        "/ip ssh",
+        "set always-allow-password-login=yes forwarding-enabled=both host-key-type=\\",
+        "    ed25519",
+        "/routing ospf interface-template",
+        "add area=backbone disabled=no interfaces=ether1 type=ptp",
+        "/system note",
+        "set show-at-login=no",
+        "/system ntp client",
+        "set enabled=yes",
+        "/system ntp client servers",
+        "add address=0.ru.pool.ntp.org"
+    ]
+]
+}
+
+PLAY RECAP *************************************************************************************************************************************************
+chr1                       : ok=5    changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+chr2                       : ok=5    changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+```
+
+Проверим на клиенте, что всё выролнено верно.
+
+![alt text](img/result.png)  
 
 ### Вывод
 В ходе лабораторной работы с помощью Ansible были настроены сетевые устройства и собрана информация о них.
