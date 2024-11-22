@@ -6,7 +6,7 @@ Group: K34202
 Author: Gusevskaya Arina  
 Lab: Lab2 
 Date of create: 10.10.2024  
-Date of finished: 25.10.2024 
+Date of finished: 22.11.2024 
 
 ## Лабораторная работа №2 "Развертывание дополнительного CHR, первый сценарий Ansible"
 
@@ -33,7 +33,7 @@ Date of finished: 25.10.2024
 
 4. Добавим информацию о новом клиенте в конфигурационный файл wg0.conf в директории etc/wireguard/ на сервере. Добавим IP.
 
-<img src="img/conf.png" width="500">
+<img src="img/conf1.png" width="500">
 <img src="img/ipadd.png" width="700">
 
 5. Пропингуем сервер с клиентов, чтобы протестировать связь.
@@ -268,7 +268,7 @@ chr2                       : ok=5    changed=4    unreachable=0    failed=0    s
 
 Проверим на клиенте, что всё выролнено верно.
 
-![alt text](img/result.png)  
+<img src="img/result.png" width="700"> 
 
 ### Вывод
 В ходе лабораторной работы с помощью Ansible были настроены сетевые устройства и собрана информация о них.
