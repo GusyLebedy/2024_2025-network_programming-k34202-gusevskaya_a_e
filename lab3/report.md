@@ -4,8 +4,8 @@ Course: [Network programming](https://github.com/itmo-ict-faculty/network-progra
 Year: 2024/2025  
 Group: K34202  
 Author: Gusevskaya Arina  
-Lab: Lab3 
-Date of create: 28.11.2024  
+Lab: Lab3
+<br/>Date of create: 28.11.2024  
 Date of finished: 06.12.2024 
 
 ## Лабораторная работа №3 "Развертывание Netbox, сеть связи как источник правды в системе технического учета Netbox"
