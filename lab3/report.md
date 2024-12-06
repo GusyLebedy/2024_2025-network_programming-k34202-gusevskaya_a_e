@@ -210,11 +210,11 @@ arina@compute-vm-2-1-10-hdd-1729519220003:~$ cat serial_num.yml
 ```
 8. Проверим, что появились серийные номера
 
-<img src="img/ser.png" width="700">
+<img src="img/chr.png" width="700">
 
 9. Изобразим схему связи в draw.io.
 
-<img src="img/ser.png">
+<img src="img/drawio.png">
 
 
 <p><b>Вывод:</b> в ходе выполнения данной лабораторной работе мы ознакомитесь с интеграцией Ansible и Netbox и изучили методы сбора информации с помощью данной интеграции.</p>
