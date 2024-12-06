@@ -92,7 +92,7 @@ docker compose up
 
 <img src="img/galaxy.png" width="700">
 
-3. Создадим файл [netbox_conf_galaxy.yml] (токен генерируется в приложении netbox)
+3. Создадим файл netbox_conf_galaxy.yml (токен генерируется в приложении netbox)
 ```
 plugin: netbox.netbox.nb_inventory
 api_endpoint: http://127.0.0.1:8000
@@ -129,8 +129,7 @@ interfaces: True
 ```
 
 Запустим playbook:
-```
-ansible-playbook -i inventory ansible-playbook.yml
+
 ```
 arina@compute-vm-2-1-10-hdd-1729519220003:~$ ansible-playbook -i inventory ansible-playbook.yml
 
@@ -151,6 +150,7 @@ changed: [chr1]
 PLAY RECAP *************************************************************************************************************************************************
 chr1                       : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 chr2                       : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+```
 
 
 7. Напишем сценарий, позволяющий собрать серийный номер устройства и вносящий серийный номер в Netbox.
