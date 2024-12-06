@@ -208,9 +208,9 @@ arina@compute-vm-2-1-10-hdd-1729519220003:~$ cat serial_num.yml
         msg: "Serial number for {{ inventory_hostname }} updated to {{ serial_number }} in NetBox"
       when: update_response.status == 200
 ```
-8. Проверим, что появились серийные номера
+8. Проверим, что появились серийные номера.
 
-<img src="img/chr.png" width="700">
+<img src="img/chr.png" width="400">
 
 9. Изобразим схему связи в draw.io.
 
